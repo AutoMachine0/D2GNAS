@@ -14,15 +14,6 @@ from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
 
 def graphnas(graph, graph_loader, device):
     # default configuration
-    # gnn_model_config = {"num_node_features": graph.num_node_features,
-    #                     "num_classes": graph.num_classes,
-    #                     "hidden_dimension": 128,
-    #                     "learn_rate": 0.005,
-    #                     "node_element_dropout_probability": 0.6,
-    #                     "edge_dropout_probability": 0.5,
-    #                     "weight_decay": 0.0005,
-    #                     "train_epoch": 200}
-
     gnn_model_config = {"num_node_features": graph.num_node_features,
                         "num_classes": graph.num_classes,
                         "hidden_dimension": 128,
@@ -30,7 +21,8 @@ def graphnas(graph, graph_loader, device):
                         "node_element_dropout_probability": 0.6,
                         "edge_dropout_probability": 0.5,
                         "weight_decay": 0.0005,
-                        "train_epoch": 5}
+                        "train_epoch": 200}
+
 
     estimator = MultiTrailEvaluation(gnn_model_config=gnn_model_config,
                                      graph=graph_loader,
@@ -45,30 +37,15 @@ def graphnas(graph, graph_loader, device):
                         device)
 
     # default configuration
-    # top_gnn, _ = searcher.search(controller_train_epoch=1000,
-    #                              num_sampled_gnn_for_one_train_epoch=1,
-    #                              scale_of_sampled_gnn=100,
-    #                              return_top_k=10)
-
-
-    top_gnn, _ = searcher.search(controller_train_epoch=10,
+    top_gnn, _ = searcher.search(controller_train_epoch=1000,
                                  num_sampled_gnn_for_one_train_epoch=1,
-                                 scale_of_sampled_gnn=5,
-                                 return_top_k=2)
+                                 scale_of_sampled_gnn=100,
+                                 return_top_k=10)
 
     return top_gnn
 
 def autograph(graph, graph_loader, device):
     # default configuration
-    # gnn_model_config = {"num_node_features": graph.num_node_features,
-    #                     "num_classes": graph.num_classes,
-    #                     "hidden_dimension": 128,
-    #                     "learn_rate": 0.005,
-    #                     "node_element_dropout_probability": 0.6,
-    #                     "edge_dropout_probability": 0.5,
-    #                     "weight_decay": 0.0005,
-    #                     "train_epoch": 200}
-
     gnn_model_config = {"num_node_features": graph.num_node_features,
                         "num_classes": graph.num_classes,
                         "hidden_dimension": 128,
@@ -76,7 +53,7 @@ def autograph(graph, graph_loader, device):
                         "node_element_dropout_probability": 0.6,
                         "edge_dropout_probability": 0.5,
                         "weight_decay": 0.0005,
-                        "train_epoch": 5}
+                        "train_epoch": 200}
 
     estimator = MultiTrailEvaluation(gnn_model_config=gnn_model_config,
                                      graph=graph_loader,
@@ -85,13 +62,9 @@ def autograph(graph, graph_loader, device):
     searcher = AutoGraph(estimator=estimator)
 
     # default configuration
-    # top_gnn, _ = searcher.search(num_population=100,
-    #                              search_epoch=1000,
-    #                              return_top_k=10)
-
-    top_gnn, _ = searcher.search(num_population=10,
-                                 search_epoch=5,
-                                 return_top_k=2)
+    top_gnn, _ = searcher.search(num_population=100,
+                                 search_epoch=1000,
+                                 return_top_k=10)
 
     return top_gnn
 
@@ -115,13 +88,10 @@ def darts(graph, operation_candidates_list, device):
                      archi_param_optim_config=archi_param_optim_config,
                      device=device)
     # default configuration
-    # top_gnn = searcher.search(graph=graph,
-    #                           search_epoch=1100,
-    #                           return_top_k=10)
-
     top_gnn = searcher.search(graph=graph,
-                              search_epoch=10,
-                              return_top_k=2)
+                              search_epoch=1100,
+                              return_top_k=10)
+
 
     return top_gnn
 
@@ -151,13 +121,10 @@ def dds(graph, operation_candidates_list, device):
                    device=device)
 
     # default configuration
-    # top_gnn = searcher.search(graph=graph,
-    #                           inner_search_epoch=1100,
-    #                           return_top_k=10)
-
     top_gnn = searcher.search(graph=graph,
-                              inner_search_epoch=10,
-                              return_top_k=2)
+                              inner_search_epoch=1100,
+                              return_top_k=10)
+
 
     return top_gnn
 
@@ -180,23 +147,15 @@ def d2gnas(graph, operation_candidates_list, device):
 
     loss_f = torch.nn.CrossEntropyLoss()
     # default configuration
-    # supernet_config = {"warm_up_train_epoch": 130,
-    #                    "single_path_training_sample_size_list": [80, 0]}
-
-    supernet_config = {"warm_up_train_epoch": 2,
-                       "single_path_training_sample_size_list": [2, 0]}
+    supernet_config = {"warm_up_train_epoch": 130,
+                       "single_path_training_sample_size_list": [80, 0]}
 
     differentiable_search_optimizer_config_dict = {"lr": 0.01,
                                                    "decay": 0.005}
     # default configuration
-    # differentiable_searcher_config = {"temperature": 0.5,
-    #                                   "differentiable_search_optimizer_config_dict": differentiable_search_optimizer_config_dict,
-    #                                   "differentiable_search_epoch_list": [1100, 100],
-    #                                   "differentiable_search_num_return_top_k_gnn": 10}
-
     differentiable_searcher_config = {"temperature": 0.5,
                                       "differentiable_search_optimizer_config_dict": differentiable_search_optimizer_config_dict,
-                                      "differentiable_search_epoch_list": [100, 10],
+                                      "differentiable_search_epoch_list": [1100, 100],
                                       "differentiable_search_num_return_top_k_gnn": 10}
 
     searcher = SupernetPruningSearch(supernet=supernet,
