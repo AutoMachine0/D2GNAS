@@ -8,9 +8,23 @@
 <div align=left> <img src="pic/D2GNAS.svg" height="100%" width="100%"/> </div>
 
 
-**Environment requirement**
+## Installing For Ubuntu 16.04
+
+- **Ensure you have installed CUDA 11.1 before installing other packages**
+
+**1.Python environment:** recommending using Conda package manager to install
+
 ```python
-requirement.txt
+conda create -n d2gnas python=3.7
+source activate d2gnas
+```
+
+**2.Python package:**
+```python
+torch == 1.8.2
+torch-geometric == 2.0.2
+torch-scatter == 2.0.7
+torch-sparse == 0.6.11
 ```
 ## Running the Experiment
 **1.Performance test with manual GNN and the optimal GNN designed by D<sup>2</sup>GNAS**
@@ -27,3 +41,4 @@ python search_from_scratch.py
 ```python
 python performance_test_with_hpo.py
 ```
+
