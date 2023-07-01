@@ -8,7 +8,7 @@
 <div align=left> <img src="pic/D2GNAS.svg" height="100%" width="100%"/> </div>
 
 
-## Installing For Ubuntu 16.04
+## Installing for Ubuntu 16.04
 
 - **Ensure you have installed CUDA 11.1 before installing other packages**
 
