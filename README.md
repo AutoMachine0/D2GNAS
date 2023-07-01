@@ -32,17 +32,13 @@ torch-sparse == 0.6.11
 python performance_test.py
 ```
 
-**2.Search the top promising GNN architectures from scratch with all GNAS methods**
+**2.Search the top promising GNN architectures from scratch with all GNAS methods and test with HPO**
 ```python
-python search_from_scratch.py
+step1:python search_from_scratch.py
+step2:python performance_test_with_hpo.py
 ```
 
-**3.Testing the optimal GNN architecture from top promising GNN architectures with HPO**
-```python
-python performance_test_with_hpo.py
-```
-
-**4.Unzip the cs_phy.tar.gz in the dataset file first for CS and Physics testing**
+**3.Unzip the cs_phy.tar.gz in the dataset file first for CS and Physics testing**
 ```python
 tar -xvf cs_phy.tar.gz
 ```
