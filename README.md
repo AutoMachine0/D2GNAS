@@ -42,3 +42,7 @@ python search_from_scratch.py
 python performance_test_with_hpo.py
 ```
 
+**4.Unzip the cs_phy.tar.gz in the dataset file first for CS and Physics testing**
+```python
+tar -xvf cs_phy.tar.gz
+```
