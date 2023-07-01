@@ -152,19 +152,12 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # 实验配置
-    # tuning_epoch = 200
-    # gnn_train_epoch = 30
-    # gnn_test_train_epoch = 100
-    # test_epoch = 10
-    # validation_training_epoch = 100
-
-    # 测试配置
-    tuning_epoch = 2
-    gnn_train_epoch = 2
-    gnn_test_train_epoch = 2
-    test_epoch = 2
-    validation_training_epoch = 2
+    # default config
+    tuning_epoch = 200
+    gnn_train_epoch = 30
+    gnn_test_train_epoch = 100
+    test_epoch = 10
+    validation_training_epoch = 100
 
     for strategy in strategy_list:
         for data in data_list:
