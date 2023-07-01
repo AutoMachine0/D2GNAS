@@ -8,7 +8,7 @@
 <div align=left> <img src="pic/D2GNAS.svg" height="100%" width="100%"/> </div>
 
 
-## Installing for Ubuntu 16.04
+## Install based on Ubuntu 16.04
 
 - **Ensure you have installed CUDA 11.1 before installing other packages**
 
@@ -26,7 +26,7 @@ torch-geometric == 2.0.2
 torch-scatter == 2.0.7
 torch-sparse == 0.6.11
 ```
-## Running the Experiment
+## Run the Experiment
 **1.Performance test with manual GNN and the optimal GNN designed by D<sup>2</sup>GNAS**
 ```python
 python performance_test.py
