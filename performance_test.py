@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # # ++++++++++++++++++++++++++++++++++++
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # gnn_test_train_epoch = 100
-    # test_epoch = 1
+    # test_epoch = 10
     # data_list = ["Computers", "Photo", "Pubmed"]
     # # For GCN,SGAE,SGC
     # search_strategy_list = ["GCN", "SAGE", "SGC"]

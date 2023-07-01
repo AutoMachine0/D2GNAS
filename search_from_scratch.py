@@ -13,6 +13,7 @@ from torch_geometric.loader import ClusterData, ClusterLoader
 from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
 
 def graphnas(graph, graph_loader, device):
+    
     # default configuration
     gnn_model_config = {"num_node_features": graph.num_node_features,
                         "num_classes": graph.num_classes,
@@ -22,7 +23,6 @@ def graphnas(graph, graph_loader, device):
                         "edge_dropout_probability": 0.5,
                         "weight_decay": 0.0005,
                         "train_epoch": 200}
-
 
     estimator = MultiTrailEvaluation(gnn_model_config=gnn_model_config,
                                      graph=graph_loader,
@@ -45,6 +45,7 @@ def graphnas(graph, graph_loader, device):
     return top_gnn
 
 def autograph(graph, graph_loader, device):
+    
     # default configuration
     gnn_model_config = {"num_node_features": graph.num_node_features,
                         "num_classes": graph.num_classes,
@@ -87,11 +88,11 @@ def darts(graph, operation_candidates_list, device):
                      operation_weight_optim_config=operation_weight_optim_config,
                      archi_param_optim_config=archi_param_optim_config,
                      device=device)
+    
     # default configuration
     top_gnn = searcher.search(graph=graph,
                               search_epoch=1100,
                               return_top_k=10)
-
 
     return top_gnn
 
@@ -125,7 +126,6 @@ def dds(graph, operation_candidates_list, device):
                               inner_search_epoch=1100,
                               return_top_k=10)
 
-
     return top_gnn
 
 def d2gnas(graph, operation_candidates_list, device):
@@ -146,6 +146,7 @@ def d2gnas(graph, operation_candidates_list, device):
     supernet.mixed_supernet_construction_with_operation_candidates(operation_candidates_list)
 
     loss_f = torch.nn.CrossEntropyLoss()
+    
     # default configuration
     supernet_config = {"warm_up_train_epoch": 130,
                        "single_path_training_sample_size_list": [80, 0]}
@@ -190,6 +191,7 @@ def gnn_record(data_name, search_strategy, top_gnn, time_cost):
 if __name__ == "__main__":
 
     data_list = ["Computers", "Photo", "Pubmed"]
+    
     for data_name in data_list:
         graph = GraphData(data_name, shuffle=False).data
         cluster_data = ClusterData(graph, num_parts=1)
