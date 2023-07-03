@@ -2,9 +2,9 @@ import copy
 import torch
 import random
 from planetoid import GraphData
-from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
 from torch_geometric.loader import ClusterData, ClusterLoader
-from multi_trial_gnas.discrete_search_space import search_space, conv_candidate, norm_candidate, act_candidate
+from multi_trail_gnas.discrete_search_space import search_space, conv_candidate, norm_candidate, act_candidate
 
 class AutoGraph(object):
 
@@ -18,14 +18,14 @@ class AutoGraph(object):
         print("Multi-trail AutoGraph Search Strategy Starting")
         print(64*"=")
 
-        # population 初始化
+        # population initialization
         search_space_size = len(search_space)
         uniform_random_sample_population_index = random.sample(range(0, search_space_size - 1), num_population)
         population = [search_space[index] for index in uniform_random_sample_population_index]
 
         print("Uniform Random Initialization Population Size is:", len(population))
 
-        # population gnn 评估
+        # population gnn evaluate
         population_val_score = []
         for gnn in population:
             val_score = self.estimator.get_estimation_score(architecture=gnn)
@@ -33,11 +33,11 @@ class AutoGraph(object):
 
         print(len(population), "Individuals Have Been Estimated")
 
-        # population gnn and val score 加入 history gnn
+        # population gnn and val score add in history gnn
         self.history_gnn = self.history_gnn + population
         self.history_gnn_val_score = self.history_gnn_val_score + population_val_score
 
-        # regularized evolution search 开始
+        # regularized evolution search start
         for epoch in range(search_epoch):
             print(32*"+")
             print("Search Epoch:", epoch+1)
@@ -51,7 +51,7 @@ class AutoGraph(object):
             population, population_val_score = self.age_mutation(population,
                                                                  population_val_score,
                                                                  best_individual)
-        # 在history gnn选取top n gnn
+        # select top n gnn in history gnn
         top_gnn, top_gnn_val_score = self.estimator.rank_based_estimation_score(self.history_gnn,
                                                                                 self.history_gnn_val_score,
                                                                                 top_k=return_top_k)
@@ -71,33 +71,33 @@ class AutoGraph(object):
         print("Mutation Index:", individual_mutation_index)
         mutation_operator = None
         if individual_mutation_index in [0, 3]:
-            # conv 变异
+            # conv mutation
             print("Convolution Operation Mutation")
 
             mutation_candidate_index = random.randint(0, len(conv_candidate)-1)
-            # 必须产生新的基因
+            # generate new gene
             while conv_candidate[mutation_candidate_index] == best_individual[individual_mutation_index]:
                 mutation_candidate_index = random.randint(0, len(conv_candidate) - 1)
 
             mutation_operator = conv_candidate[mutation_candidate_index]
 
         elif individual_mutation_index in [1, 4]:
-            # norm 变异
+            # norm mutate
             print("Normalization Operation Mutation")
 
             mutation_candidate_index = random.randint(0, len(norm_candidate) - 1)
-            # 必须产生新的基因
+            # generate new gene
             while norm_candidate[mutation_candidate_index] == best_individual[individual_mutation_index]:
                 mutation_candidate_index = random.randint(0, len(norm_candidate) - 1)
 
             mutation_operator = norm_candidate[mutation_candidate_index]
 
         elif individual_mutation_index in [2, 5]:
-            # act 变异
+            # act mutate
             print("Activation Operation Mutation")
 
             mutation_candidate_index = random.randint(0, len(act_candidate) - 1)
-            # 必须产生新的基因
+            # generate new gene
             while act_candidate[mutation_candidate_index] == best_individual[individual_mutation_index]:
                 mutation_candidate_index = random.randint(0, len(act_candidate) - 1)
 
@@ -109,17 +109,17 @@ class AutoGraph(object):
 
         best_individual[individual_mutation_index] = mutation_operator
 
-        # child gnn 评估
+        # child gnn evaluate
         val_score = self.estimator.get_estimation_score(architecture=best_individual)
         print("Child Individual:", best_individual, "Estimation Score:", val_score)
 
         # age evolution strategy
-        population.append(best_individual)  # population 队列最右端加入 child gnn
+        population.append(best_individual)  # child gnn add in the far right end of population queue
         population_val_score.append(val_score)
 
-        population.pop(0)  # 移除 population 队列最左端的 child gnn
+        population.pop(0)  # remove the child gnn from the far left end of population queue
         population_val_score.pop(0)
-        # 将child gnn信息加入history列表中
+        # add child gnn information in history list
         self.history_gnn.append(best_individual)
         self.history_gnn_val_score.append(val_score)
 

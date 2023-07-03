@@ -4,7 +4,7 @@ from hyperopt import fmin, tpe
 from planetoid import GraphData
 from torch_geometric.loader import ClusterData, ClusterLoader
 from hpo.hp_search_space import HP_SEARCH_SPACE, HP_SEARCH_SPACE_Mapping
-from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
 
 class HpSearchObj(object):
 

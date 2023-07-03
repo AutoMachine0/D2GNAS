@@ -5,12 +5,12 @@ import torch
 from planetoid import GraphData
 from coupled_dgnas.dds_strategy import DDS
 from coupled_dgnas.dart_strategy import DARTS
-from multi_trial_gnas.graphnas_strategy import GraphNAS
-from multi_trial_gnas.autograph_strategy import AutoGraph
+from multi_trail_gnas.graphnas_strategy import GraphNAS
+from multi_trail_gnas.autograph_strategy import AutoGraph
 from mixed_supernet import MixedSuperNet
 from supernet_pruning_search import SupernetPruningSearch
 from torch_geometric.loader import ClusterData, ClusterLoader
-from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
 
 def graphnas(graph, graph_loader, device):
     
@@ -266,7 +266,6 @@ if __name__ == "__main__":
                    search_strategy="DDS",
                    top_gnn=top_gnn,
                    time_cost=time_cost)
-
 
         operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
 

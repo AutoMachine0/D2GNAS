@@ -3,7 +3,7 @@ import numpy as np
 import torch.nn.functional as F
 from search_space.mlp import MLP
 from search_space.act_pool import ActPool
-from search_space.conv_pool_mannual_gnn import ConvPool
+from search_space.conv_pool import ConvPool
 from search_space.norm_pool import NormPool
 from graph_augment.edge_dropout_pyg import dropout_edge
 
@@ -78,7 +78,7 @@ class MultiTrailEvaluation(object):
 
     def get_estimation_score(self, architecture):
 
-        # 构建GNN模型
+        # build gnn model
         gnn_model = GNNBuildWithArchitecture(num_node_features=self.num_node_features,
                                              num_classes=self.num_classes,
                                              hidden_dimension=self.hidden_dimension,
@@ -91,8 +91,7 @@ class MultiTrailEvaluation(object):
                                      weight_decay=self.weight_decay)
 
         loss_f = torch.nn.CrossEntropyLoss()
-
-        # GNN模型训练
+        # gnn model training
         gnn_model.train()
         for epoch in range(self.train_epoch):
             for sub_graph, step in zip(self.graph, range(self.batch_number)):
@@ -105,8 +104,7 @@ class MultiTrailEvaluation(object):
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-
-        # GNN模型评估
+        # GNN evaluate
         gnn_model.eval()
         val_iter = 0
         sum_val_acc = []
@@ -125,7 +123,6 @@ class MultiTrailEvaluation(object):
         val_acc = np.array(sum_val_acc).sum() / val_iter
 
         return val_acc
-
     def get_best_validation_estimation(self, architecture):
         torch.cuda.empty_cache()
         # 构建GNN模型
@@ -143,7 +140,7 @@ class MultiTrailEvaluation(object):
         loss_f = torch.nn.CrossEntropyLoss()
 
         best_val_acc = 0
-        # GNN模型训练
+        # gnn model training
         for epoch in range(self.train_epoch):
 
             gnn_model.train()
@@ -157,8 +154,7 @@ class MultiTrailEvaluation(object):
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-
-            # GNN模型评估
+            # gnn model evaluate
             gnn_model.eval()
             val_iter = 0
             sum_val_acc = []
@@ -180,7 +176,7 @@ class MultiTrailEvaluation(object):
         return best_val_acc
 
     def get_test_score(self, architecture):
-        # 构建GNN模型
+        # build gnn model
         gnn_model = GNNBuildWithArchitecture(num_node_features=self.num_node_features,
                                              num_classes=self.num_classes,
                                              hidden_dimension=self.hidden_dimension,
@@ -198,8 +194,7 @@ class MultiTrailEvaluation(object):
         for epoch in range(self.train_epoch):
 
             for sub_graph in self.graph:
-
-                # GNN模型训练
+                # gnn model training
                 gnn_model.train()
                 y_pred = gnn_model(sub_graph.x, sub_graph.edge_index)
 
@@ -209,8 +204,7 @@ class MultiTrailEvaluation(object):
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-
-                # GNN模型测试
+                # gnn model testing
                 gnn_model.eval()
                 y_pred = gnn_model(sub_graph.x, sub_graph.edge_index)
                 pred = y_pred.argmax(dim=1)

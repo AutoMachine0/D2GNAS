@@ -25,6 +25,7 @@ torch == 1.8.2
 torch-geometric == 2.0.2
 torch-scatter == 2.0.7
 torch-sparse == 0.6.11
+hyperopt == 0.1.2
 ```
 ## Run the Experiment
 **1.Performance test with manual GNN and the optimal GNN designed by D<sup>2</sup>GNAS**

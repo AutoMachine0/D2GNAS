@@ -1,14 +1,11 @@
-import os
 import torch
 import torch.nn as nn
-from planetoid import GraphData
 import torch.nn.functional as F
 from torch.autograd import Variable
 
 device_ = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class ArchitectureGradientOptimizer(torch.nn.Module):
-
     def __init__(self, supernet, lr, decay, device):
 
         super(ArchitectureGradientOptimizer, self).__init__()
@@ -31,7 +28,6 @@ class ArchitectureGradientOptimizer(torch.nn.Module):
 
         # loss function for learnable architecture alpha parameter
         self.loss = torch.nn.CrossEntropyLoss()
-
     def sample_gnn_model_build(self,  sample_architecture, supernet):
         """
         passing current supernet and construct the gnn model based the gnn architecture sampled by gumbel softmax
@@ -47,7 +43,6 @@ class ArchitectureGradientOptimizer(torch.nn.Module):
         self.layer2_conv = supernet.supernet_operation_pool[3].get_candidate(sample_architecture[3])
         self.layer2_norm = supernet.supernet_operation_pool[4].get_candidate(sample_architecture[4])
         self.layer2_act = supernet.supernet_operation_pool[5].get_candidate(sample_architecture[5])
-
     def forward(self,
                 x,
                 edge_index,
@@ -69,7 +64,6 @@ class ArchitectureGradientOptimizer(torch.nn.Module):
         return x
 
 class DifferentiableSearch(object):
-
     def __init__(self,
                  supernet,
                  graph,
@@ -178,14 +172,12 @@ class DifferentiableSearch(object):
             print(gnn)
         
         return self.differentiable_search_pruning_best_gnn_history, differentiable_pruning_search_path
-
     def hard_gumbel_softmax_sample(self, sample_probability):
 
         hard_gumbel_softmax_sample_output = F.gumbel_softmax(logits=sample_probability,
                                                              tau=self.temperature,
                                                              hard=True)
         return hard_gumbel_softmax_sample_output
-
     def sample_gnn_architecture_check(self, gumbel_softmax_sample_ret_list, supernet, search_paths):
 
         candidate_list = []
@@ -208,7 +200,6 @@ class DifferentiableSearch(object):
             re_sample = False
 
         return re_sample, sample_candidate_index, sample_architecture
-
     def best_alpha_gnn_architecture(self, architecture_alpha_list, supernet):
 
         best_alpha_architecture = []
