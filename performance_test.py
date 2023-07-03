@@ -180,7 +180,7 @@ if __name__ == "__main__":
     data_list = ["Computers", "Photo", "Pubmed"]
     gnn_test_train_epoch = 100
     search_strategy = "DDGNAS"
-    test_epoch = 1
+    test_epoch = 10
     manner = "gnas"
 
     gnn_architecture_list = [["ClusterGCNConv", "GraphNorm", "Relu6", "SGConv", "GraphNorm", "Relu6"],
