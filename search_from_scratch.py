@@ -7,6 +7,8 @@ from coupled_dgnas.dds_strategy import DDS
 from coupled_dgnas.dart_strategy import DARTS
 from multi_trail_gnas.graphnas_strategy import GraphNAS
 from multi_trail_gnas.autograph_strategy import AutoGraph
+from multi_trail_gnas.autognas_strategy import AutoGNAS
+from multi_trail_gnas.deepgnas_strategy import DeepGNAS
 from mixed_supernet import MixedSuperNet
 from supernet_pruning_search import SupernetPruningSearch
 from torch_geometric.loader import ClusterData, ClusterLoader
@@ -66,6 +68,70 @@ def autograph(graph, graph_loader, device):
     top_gnn, _ = searcher.search(num_population=100,
                                  search_epoch=1000,
                                  return_top_k=10)
+
+    return top_gnn
+
+def autognas(graph, graph_loader, device):
+
+    # default configuration
+    gnn_model_config = {"num_node_features": graph.num_node_features,
+                        "num_classes": graph.num_classes,
+                        "hidden_dimension": 128,
+                        "learn_rate": 0.005,
+                        "node_element_dropout_probability": 0.6,
+                        "edge_dropout_probability": 0.5,
+                        "weight_decay": 0.0005,
+                        "train_epoch": 200}
+
+    estimator = MultiTrailEvaluation(gnn_model_config=gnn_model_config,
+                                     graph=graph_loader,
+                                     device=device)
+
+    # default configuration
+    search_parameter = {"sharing_population_size": 20,
+                        "parent_num": 1,
+                        "mutation_num": 1}
+
+    searcher = AutoGNAS(estimator=estimator,
+                        search_parameter=search_parameter)
+    
+    # default configuration
+    top_gnn, _ = searcher.search(num_population=100, search_epoch=1000, return_top_k=10)
+
+    return top_gnn
+
+def deepgnas(graph, graph_loader, device):
+
+    gnn_model_config = {"num_node_features": graph.num_node_features,
+                        "num_classes": graph.num_classes,
+                        "hidden_dimension": 128,
+                        "learn_rate": 0.0001,
+                        "node_element_dropout_probability": 0.6,
+                        "edge_dropout_probability": 0.3,
+                        "weight_decay": 0.0001,
+                        "train_epoch": 200}
+
+    estimator = MultiTrailEvaluation(gnn_model_config=gnn_model_config,
+                                     graph=graph_loader,
+                                     device=device)
+    # default configuration
+    agent_train_epoch = 1000
+    search_parameter = {"gamma": 1.0,
+                        "epsilon": 1.0,
+                        "test_epsilon": 0.2,
+                        "agent_train_epoch": agent_train_epoch,
+                        "hidden_dim": 128,
+                        "state_space_vec_dim": 128,
+                        "action_space_vec_dim": 128,
+                        "target_network_update_epoch": 10}
+
+    searcher = DeepGNAS(estimator=estimator,
+                        search_parameter=search_parameter)
+    
+    # default configuration
+    top_gnn, top_gnn_score = searcher.search(agent_train_epoch=agent_train_epoch,
+                                             scale_of_sampled_gnn=100,
+                                             return_top_k=10)
 
     return top_gnn
 
@@ -190,7 +256,7 @@ def gnn_record(data_name, search_strategy, top_gnn, time_cost):
 
 if __name__ == "__main__":
 
-    data_list = ["Computers", "Photo", "Pubmed"]
+    data_list = ["Computers", "Photo", "Pubmed", "CS", "Physics"]
     
     for data_name in data_list:
         graph = GraphData(data_name, shuffle=False).data
@@ -223,49 +289,69 @@ if __name__ == "__main__":
                                       "Sigmoid", "Softplus",
                                       "Tanh", "Linear"]]
 
-        t1 = time.time()
-        top_gnn = graphnas(graph=graph, graph_loader=graph_loader, device=device)
-        t2 = time.time()
-        time_cost = str(t2-t1)
+        # t1 = time.time()
+        # top_gnn = graphnas(graph=graph, graph_loader=graph_loader, device=device)
+        # t2 = time.time()
+        # time_cost = str(t2-t1)
+        #
+        # gnn_record(data_name=data_name,
+        #            search_strategy="GraphNAS",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
+        #
+        # t1 = time.time()
+        # top_gnn = autograph(graph=graph, graph_loader=graph_loader, device=device)
+        # t2 = time.time()
+        # time_cost = str(t2 - t1)
+        #
+        # gnn_record(data_name=data_name,
+        #            search_strategy="AutoGraph",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
 
-        gnn_record(data_name=data_name,
-                   search_strategy="GraphNAS",
-                   top_gnn=top_gnn,
-                   time_cost=time_cost)
+        # t1 = time.time()
+        # top_gnn = autognas(graph=graph, graph_loader=graph_loader, device=device)
+        # t2 = time.time()
+        # time_cost = str(t2 - t1)
+        #
+        # gnn_record(data_name=data_name,
+        #            search_strategy="AutoGNAS",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
 
-        t1 = time.time()
-        top_gnn = autograph(graph=graph, graph_loader=graph_loader, device=device)
-        t2 = time.time()
-        time_cost = str(t2 - t1)
+        # t1 = time.time()
+        # top_gnn = deepgnas(graph=graph, graph_loader=graph_loader, device=device)
+        # t2 = time.time()
+        # time_cost = str(t2 - t1)
+        # 
+        # gnn_record(data_name=data_name,
+        #            search_strategy="DeepGNAS",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
 
-        gnn_record(data_name=data_name,
-                   search_strategy="AutoGraph",
-                   top_gnn=top_gnn,
-                   time_cost=time_cost)
-
-        operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
-
-        t1 = time.time()
-        top_gnn = darts(graph=graph, operation_candidates_list=operation_candidates_list_input, device=device)
-        t2 = time.time()
-        time_cost = str(t2 - t1)
-
-        gnn_record(data_name=data_name,
-                   search_strategy="DARTS",
-                   top_gnn=top_gnn,
-                   time_cost=time_cost)
-
-        operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
-
-        t1 = time.time()
-        top_gnn = dds(graph=graph, operation_candidates_list=operation_candidates_list_input, device=device)
-        t2 = time.time()
-        time_cost = str(t2 - t1)
-
-        gnn_record(data_name=data_name,
-                   search_strategy="DDS",
-                   top_gnn=top_gnn,
-                   time_cost=time_cost)
+        # operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
+        #
+        # t1 = time.time()
+        # top_gnn = darts(graph=graph, operation_candidates_list=operation_candidates_list_input, device=device)
+        # t2 = time.time()
+        # time_cost = str(t2 - t1)
+        #
+        # gnn_record(data_name=data_name,
+        #            search_strategy="DARTS",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
+        #
+        # operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
+        #
+        # t1 = time.time()
+        # top_gnn = dds(graph=graph, operation_candidates_list=operation_candidates_list_input, device=device)
+        # t2 = time.time()
+        # time_cost = str(t2 - t1)
+        #
+        # gnn_record(data_name=data_name,
+        #            search_strategy="DDS",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
 
         operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
 
@@ -281,3 +367,4 @@ if __name__ == "__main__":
                    search_strategy="D2GNAS",
                    top_gnn=top_gnn,
                    time_cost=time_cost)
+

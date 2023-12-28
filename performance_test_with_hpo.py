@@ -148,7 +148,7 @@ def best_validation_architecture(search_strategy, data, graph, device, gnn_train
 if __name__ == "__main__":
 
     data_list = ["Computers", "Photo", "Pubmed"]
-    strategy_list = ["D2GNAS", "GraphNAS", "AutoGraph", "DDS", "DARTS"]
+    strategy_list = ["D2GNAS", "GraphNAS", "AutoGraph", "AutoGNAS", "DeepGNAS", "DDS", "DARTS"]
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
