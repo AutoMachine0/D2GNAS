@@ -43,3 +43,18 @@ step2:python performance_test_with_hpo.py
 ```python
 tar -xvf cs_phy.tar.gz
 ```
+
+## Citing
+If you think D2GNAS	 is useful tool for you, please cite our paper, thank you for your support:
+
+```
+@article{CHEN2024120700,
+title = {Decoupled differentiable graph neural architecture search},
+journal = {Information Sciences},
+volume = {673},
+pages = {120700},
+year = {2024},
+issn = {0020-0255},
+doi = {https://doi.org/10.1016/j.ins.2024.120700},
+url = {https://www.sciencedirect.com/science/article/pii/S0020025524006133}}
+```
