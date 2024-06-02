@@ -45,7 +45,7 @@ tar -xvf cs_phy.tar.gz
 ```
 
 ## Citing
-If you think D2GNAS	 is useful tool for you, please cite our paper, thank you for your support:
+If you think D2GNN is useful tool for you, please cite our paper, thank you for your support:
 
 ```
 @article{CHEN2024120700,
