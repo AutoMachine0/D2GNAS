@@ -6,8 +6,8 @@ import torch.optim as optim
 import torch.nn.functional as F
 from planetoid import GraphData
 from torch_geometric.loader import ClusterData, ClusterLoader
-from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
-from multi_trail_gnas.discrete_search_space import gnn_topology, component_candidate_dict
+from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trial_gnas.discrete_search_space import gnn_topology, component_candidate_dict
 
 # 定义Q网络
 class QNetwork(nn.Module):

@@ -3,8 +3,8 @@ import torch
 import numpy as np
 from planetoid import GraphData
 from torch_geometric.loader import ClusterData, ClusterLoader
-from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
-from multi_trail_gnas.multi_trail_evaluation_mannul_gnn import MultiTrailEvaluation as MultiTrailEvaluation_manual
+from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trial_gnas.multi_trail_evaluation_mannul_gnn import MultiTrailEvaluation as MultiTrailEvaluation_manual
 from scalable_gnn.pasca_v3 import PaScaV3, edge_index_to_sparse_adj
 from scalable_gnn.base_op import x_row_normalization
 

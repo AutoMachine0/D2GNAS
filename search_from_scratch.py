@@ -5,14 +5,14 @@ import torch
 from planetoid import GraphData
 from coupled_dgnas.dds_strategy import DDS
 from coupled_dgnas.dart_strategy import DARTS
-from multi_trail_gnas.graphnas_strategy import GraphNAS
-from multi_trail_gnas.autograph_strategy import AutoGraph
-from multi_trail_gnas.autognas_strategy import AutoGNAS
-from multi_trail_gnas.deepgnas_strategy import DeepGNAS
+from multi_trial_gnas.graphnas_strategy import GraphNAS
+from multi_trial_gnas.autograph_strategy import AutoGraph
+from multi_trial_gnas.autognas_strategy import AutoGNAS
+from multi_trial_gnas.deepgnas_strategy import DeepGNAS
 from mixed_supernet import MixedSuperNet
 from supernet_pruning_search import SupernetPruningSearch
 from torch_geometric.loader import ClusterData, ClusterLoader
-from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
 
 def graphnas(graph, graph_loader, device):
     
@@ -289,10 +289,10 @@ if __name__ == "__main__":
                                       "Sigmoid", "Softplus",
                                       "Tanh", "Linear"]]
 
-        # t1 = time.time()
-        # top_gnn = graphnas(graph=graph, graph_loader=graph_loader, device=device)
-        # t2 = time.time()
-        # time_cost = str(t2-t1)
+        t1 = time.time()
+        top_gnn = graphnas(graph=graph, graph_loader=graph_loader, device=device)
+        t2 = time.time()
+        time_cost = str(t2-t1)
         #
         # gnn_record(data_name=data_name,
         #            search_strategy="GraphNAS",
@@ -353,18 +353,18 @@ if __name__ == "__main__":
         #            top_gnn=top_gnn,
         #            time_cost=time_cost)
 
-        operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
-
-        t1 = time.time()
-        top_gnn = d2gnas(graph=graph,
-                         operation_candidates_list=operation_candidates_list_input,
-                         device=device)
-        t2 = time.time()
-        time_cost = str(t2 - t1)
-        print("D2GNAS Search Time Cost:", time_cost)
-
-        gnn_record(data_name=data_name,
-                   search_strategy="D2GNAS",
-                   top_gnn=top_gnn,
-                   time_cost=time_cost)
+        # operation_candidates_list_input = copy.deepcopy(operation_candidates_list)
+        #
+        # t1 = time.time()
+        # top_gnn = d2gnas(graph=graph,
+        #                  operation_candidates_list=operation_candidates_list_input,
+        #                  device=device)
+        # t2 = time.time()
+        # time_cost = str(t2 - t1)
+        # print("D2GNAS Search Time Cost:", time_cost)
+        #
+        # gnn_record(data_name=data_name,
+        #            search_strategy="D2GNAS",
+        #            top_gnn=top_gnn,
+        #            time_cost=time_cost)
 

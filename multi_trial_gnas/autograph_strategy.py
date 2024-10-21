@@ -2,9 +2,9 @@ import copy
 import torch
 import random
 from planetoid import GraphData
-from multi_trail_gnas.multi_trail_evaluation import MultiTrailEvaluation
+from multi_trial_gnas.multi_trail_evaluation import MultiTrailEvaluation
 from torch_geometric.loader import ClusterData, ClusterLoader
-from multi_trail_gnas.discrete_search_space import search_space, conv_candidate, norm_candidate, act_candidate
+from multi_trial_gnas.discrete_search_space import search_space, conv_candidate, norm_candidate, act_candidate
 
 class AutoGraph(object):
 
